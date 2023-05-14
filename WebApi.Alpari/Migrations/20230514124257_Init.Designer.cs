@@ -10,7 +10,7 @@ using WebApi.Alpari.Models.Context;
 namespace WebApi.Alpari.Migrations
 {
     [DbContext(typeof(DataBaseContext))]
-    [Migration("20230513160454_Init")]
+    [Migration("20230514124257_Init")]
     partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -23,8 +23,8 @@ namespace WebApi.Alpari.Migrations
 
             modelBuilder.Entity("CategoryToDo", b =>
                 {
-                    b.Property<string>("CategoriesId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("CategoriesId")
+                        .HasColumnType("int");
 
                     b.Property<int>("TodosId")
                         .HasColumnType("int");
@@ -38,8 +38,10 @@ namespace WebApi.Alpari.Migrations
 
             modelBuilder.Entity("WebApi.Alpari.Models.Entities.Category", b =>
                 {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .UseIdentityColumn();
 
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");

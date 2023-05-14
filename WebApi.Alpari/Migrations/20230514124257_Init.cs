@@ -11,7 +11,8 @@ namespace WebApi.Alpari.Migrations
                 name: "Category",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -38,7 +39,7 @@ namespace WebApi.Alpari.Migrations
                 name: "CategoryToDo",
                 columns: table => new
                 {
-                    CategoriesId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CategoriesId = table.Column<int>(type: "int", nullable: false),
                     TodosId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>

@@ -34,6 +34,8 @@ namespace WebApi.Alpari
             string conStr = "Persist Security Info=False;User ID=sa;Password=Enssme@204;Initial Catalog=ERFAN;Data Source=192.168.178.33";
             services.AddEntityFrameworkSqlServer().AddDbContext<DataBaseContext>(option=>option.UseSqlServer(conStr));
             services.AddScoped<TodoRepository, TodoRepository>();
+            services.AddScoped<CategoryRepository, CategoryRepository>();
+
             services.AddSwaggerGen(c =>
             { 
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "WebApi.Alpari", Version = "v1" });
