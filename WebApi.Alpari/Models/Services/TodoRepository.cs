@@ -34,6 +34,7 @@ namespace WebApi.Alpari.Models.Services
                 InsertTime = todo.InsertTime,
                 Tex = todo.Tex,
                 IsDeleted = todo.IsDeleted,
+                
             };
         }
 
@@ -69,7 +70,8 @@ namespace WebApi.Alpari.Models.Services
 
         public void Delete(int id)
         {
-            _context.Todo.Remove(new ToDo { Id=id });
+            var todo = _context.Todo.Find(id);
+            todo.IsDeleted = false;
             _context.SaveChanges();
         }
 

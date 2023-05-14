@@ -25,7 +25,28 @@ namespace WebApi.Alpari.Controllers
             {
                 Id = p.Id,
                 inserttime=p.InsertTime,
-                Text=p.Tex
+                Text=p.Tex,
+                links = new List<Links>()
+                {
+                    new Links
+                    {
+                        Href = Url.Action(nameof(Get),"Todo",new {p.Id},Request.Scheme),
+                        Rel="Self",
+                        Method="Get"
+                    },
+                    new Links
+                    {
+                        Href = Url.Action(nameof(Get),"Todo",new {p.Id},Request.Scheme),
+                        Rel="Delete",
+                        Method="Delete"
+                    },
+                    new Links
+                    {
+                        Href = Url.Action(nameof(Get),"Todo",new {p.Id},Request.Scheme),
+                        Rel="Update",
+                        Method="Put"
+                    },
+                }
             }).ToList();
             return Ok(todoList);
         }
@@ -59,15 +80,20 @@ namespace WebApi.Alpari.Controllers
         }
 
         // PUT api/<TodoController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut()]
+        public IActionResult Put([FromBody] EditToDoDto editTodo)
         {
+            var result = _todoRepository.Edit(editTodo);
+            return Ok(result);
         }
 
         // DELETE api/<TodoController>/5
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public IActionResult Delete(int id)
         {
+             _todoRepository.Delete(id);
+            return Ok();
+
         }
     }
 }
