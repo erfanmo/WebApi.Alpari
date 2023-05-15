@@ -35,7 +35,7 @@ namespace WebApi.Alpari.Controllers
         public IActionResult Post(string Name)
         {
             var result = _categoryRepository.AddCategory(Name);
-            return Created(Url.Action(nameof(Get), "Categories", new { Id= result },Request.Scheme),true);
+            return Created(Url.Action(nameof(Get), "Categories", new { Id= result },Request.Scheme),tr);
         }
 
         [HttpDelete]
