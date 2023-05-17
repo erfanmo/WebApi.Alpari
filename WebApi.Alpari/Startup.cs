@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -7,10 +8,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using WebApi.Alpari.Models.Context;
 using WebApi.Alpari.Models.Services;
@@ -30,9 +33,61 @@ namespace WebApi.Alpari
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
-            string conStr = "Persist Security Info=False;User ID=sa;Password=Enssme@204;Initial Catalog=ERFAN;Data Source=192.168.178.33";
+
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(Configureoptions =>
+            {
+                Configureoptions.TokenValidationParameters = new TokenValidationParameters()
+                {
+                    ValidIssuer = Configuration["JWtConfig:issuer"],
+                    ValidAudience = Configuration["JWtConfig:audience"],
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWtConfig:Key"])),
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime = true,
+                };
+                Configureoptions.SaveToken = true;    //HttpContext.GetTokenAsync();
+                Configureoptions.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        //log 
+                        //.........
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        // log
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        //log 
+                        return Task.CompletedTask;
+                    },
+
+                    OnMessageReceived = context =>
+                    {
+                        return Task.CompletedTask;
+                    },
+                    OnForbidden = context =>
+                    {
+                       return Task.CompletedTask;
+                    }
+                };
+            });
+
+
+            string conStr = "Persist Security Info=False;User ID=sa;Password=Enssme@204;Initial Catalog=ERFAN;Data Source=10.45.56.200";
             services.AddEntityFrameworkSqlServer().AddDbContext<DataBaseContext>(option=>option.UseSqlServer(conStr));
+            
             services.AddScoped<TodoRepository, TodoRepository>();
+            services.AddScoped<UserRepository, UserRepository>();
+            services.AddScoped<UserTokenRepository,UserTokenRepository>();
             services.AddScoped<CategoryRepository, CategoryRepository>();
 
             services.AddApiVersioning(options=>
@@ -60,6 +115,7 @@ namespace WebApi.Alpari
 
             app.UseHttpsRedirection();
             app.UseRouting();
+            app.UseAuthentication();
             app.UseAuthorization();
             app.UseEndpoints(endpoints =>
             {

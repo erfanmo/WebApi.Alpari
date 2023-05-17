@@ -12,6 +12,8 @@ namespace WebApi.Alpari.Models.Context
 
         public DbSet<ToDo> Todo { get; set; }
         public DbSet<Category> Category { get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<UserToken> userTokens { get; set; }
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using WebApi.Alpari.Models.Services;
 
@@ -6,6 +7,7 @@ namespace WebApi.Alpari.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly CategoryRepository _categoryRepository;
@@ -35,7 +37,7 @@ namespace WebApi.Alpari.Controllers
         public IActionResult Post(string Name)
         {
             var result = _categoryRepository.AddCategory(Name);
-            return Created(Url.Action(nameof(Get), "Categories", new { Id= result },Request.Scheme),tr);
+            return Created(Url.Action(nameof(Get), "Categories", new { Id= result },Request.Scheme),true);
         }
 
         [HttpDelete]
