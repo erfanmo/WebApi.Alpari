@@ -14,6 +14,7 @@ namespace WebApi.Alpari.Models.Context
         public DbSet<Category> Category { get; set; }
         public DbSet<User> Users { get; set; }
         public DbSet<UserToken> userTokens { get; set; }
+        public DbSet<SmsCode> SmsCode { get; set; }
 
         protected override void OnModelCreating (ModelBuilder modelBuilder)
         {

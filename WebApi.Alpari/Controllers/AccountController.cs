@@ -26,7 +26,7 @@ namespace WebApi.Alpari.Controllers
             _userrepositry = userRepository;
         }
 
-        private LoginResultDto CreateToken(string UserName,string Password)
+        private LoginResultDto CreateToken(string Phone,string Smscode)
         {
             SecurityHelper securityHelper = new SecurityHelper();
              var user = _userrepositry.GetUser(Guid.Parse("669B8E6-319C-48D2-9D36-6D40E205AEFE"));
@@ -80,6 +80,13 @@ namespace WebApi.Alpari.Controllers
                 return Unauthorized("Token Expired");
 
             return Ok(CreateToken(null, null));
+        }
+        [HttpGet]
+        public IActionResult GetSmsCode(string PhoneNumber)
+        {
+            var smsCode = _userrepositry.GetCode(PhoneNumber);
+            //SMS code to user
+            return Ok();
         }
 
         [HttpPost]
