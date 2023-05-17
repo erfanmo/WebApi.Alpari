@@ -22,5 +22,8 @@ namespace WebApi.Alpari.Models.Entities
 
         public User user { get; set; }
         public Guid UserId { get; set; }
+
+        public string  RefreshToken { get; set; }
+        public DateTime RefreshTokenExpir { get; set; }
     }
 }
