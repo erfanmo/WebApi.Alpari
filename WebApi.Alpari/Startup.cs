@@ -17,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using WebApi.Alpari.Models.Context;
 using WebApi.Alpari.Models.Services;
+using WebApi.Alpari.Models.Services.Validator;
 
 namespace WebApi.Alpari
 {
@@ -62,7 +63,8 @@ namespace WebApi.Alpari
                     OnTokenValidated = context =>
                     {
                         // log
-                        return Task.CompletedTask;
+                        var tokenvalidatorService = context.HttpContext.RequestServices.GetRequiredService<ITokenValidator>();
+                        return tokenvalidatorService.Execute(context);
                     },
                     OnChallenge = context =>
                     {
@@ -84,7 +86,7 @@ namespace WebApi.Alpari
 
             string conStr = "Persist Security Info=False;User ID=sa;Password=Enssme@204;Initial Catalog=ERFAN;Data Source=10.45.56.200";
             services.AddEntityFrameworkSqlServer().AddDbContext<DataBaseContext>(option=>option.UseSqlServer(conStr));
-            
+            services.AddScoped<ITokenValidator, TokenValidate>();
             services.AddScoped<TodoRepository, TodoRepository>();
             services.AddScoped<UserRepository, UserRepository>();
             services.AddScoped<UserTokenRepository,UserTokenRepository>();
